@@ -1,0 +1,15 @@
+@startuml
+actor Teacher
+Teacher -> QuizAPI : POST /quizzes
+QuizAPI -> QuizAPI: transform()
+QuizAPI -> QuizApplicationService : createQuiz()
+entity Quiz
+QuizApplicationService -> QuizRepository: save()
+database QuizDB
+'QuizRepository -> QuizDB: SELECT ***
+'QuizApplicationService -> Paper : reassemble()
+'QuizApplicationService -> QuizRepository: save()
+
+QuizRepository -> QuizDB: INSERT ***
+
+@enduml

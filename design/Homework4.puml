@@ -1,0 +1,116 @@
+@startuml
+
+package examination.context <<Core SubDomain>> {
+    package examination {
+        class Examination <<Aggregate Root>> {
+            id: ExaminationId
+            teacherId: TeacherId
+            paper: Paper
+            createTime: DateTime
+            startTime: DateTime
+            endTime: DateTime
+
+            create()
+        }
+
+        class Paper <<Value Object>> {
+            paperTemplateId: PaperTemplateId
+            blankQuizList: List<BlankQuizVO>
+            totalScore: Int
+        }
+
+        class BlankQuizVO <<Value Object>> {
+            answer: Answer
+        }
+
+        class Answer <<Value Object>> {
+            referAnswer: String
+            score: Int
+        }
+
+        Examination "1" *-- "1" Paper
+        Paper "1" *-- "n" BlankQuizVO
+        BlankQuizVO "1" <-- "1" Answer
+    }
+
+    package answer.sheet {
+        class AnswerSheet <<Aggregate Root>> {
+            answerSheetId: AnswerSheetId
+            studentId: StudentId
+            score: Int
+
+            assignStudent()
+            handIn()
+            submit()
+            review(): Int
+        }
+    }
+
+    package paper {
+        class PaperTemplate <<Aggregate Root>> {
+            blankQuizIdList: List<BlankQuizId>
+
+            assemble()
+            reassemble()
+        }
+    }
+
+    package quiz {
+        class QuizBank <<Entity>> {
+            quizList: List<BlankQuiz>
+        }
+
+        class BlankQuiz <<Entity>> {
+            answer: Answer
+
+            create()
+            update()
+            delete()
+        }
+
+        QuizBank "1" o-- "n" BlankQuiz
+    }
+
+    PaperTemplate "1" o-- "5..20" BlankQuiz
+}
+
+package course.context <<Support SubDomain>>{
+    package course {
+        class Course <<Aggregate Root>> {
+            examinationId: ExaminationId
+            resourceBank: ResourceBank
+
+            create()
+            update()
+            publish()
+        }
+
+        class ResourceBank <<Value Object>> {
+            videoList: List<Video>
+        }
+
+        class Video <<Entity>> {
+            path: URL
+
+            update()
+            upload()
+            delete()
+        }
+
+        Course "1" *-- "1" ResourceBank
+        ResourceBank "1" o-- "n" Video
+    }
+}
+
+package certification.context <<Generic SubDomain>> {
+    package certification {
+        class Certification <<Aggregate Root>> {
+            courseName: String
+            studentName: String
+
+            generate(): File
+        }
+    }
+}
+
+@enduml
