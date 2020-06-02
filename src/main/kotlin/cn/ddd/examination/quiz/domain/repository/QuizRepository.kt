@@ -1,7 +1,7 @@
 package cn.ddd.examination.quiz.domain.repository
 
-import cn.ddd.examination.quiz.domain.model.Quiz
-import cn.ddd.examination.quiz.domain.model.QuizId
+import cn.ddd.examination.quiz.domain.model.entity.Quiz
+import cn.ddd.examination.quiz.domain.model.vo.QuizId
 
 interface QuizRepository {
     fun findAll(): List<Quiz>

@@ -1,10 +1,10 @@
 package cn.ddd.examination.quiz.application.command
 
-import cn.ddd.examination.quiz.domain.model.Quiz
-import cn.ddd.examination.quiz.domain.model.Quiz.Type.Companion.of
-import cn.ddd.examination.quiz.domain.model.QuizBankId
+import cn.ddd.examination.quiz.domain.model.entity.Quiz
+import cn.ddd.examination.quiz.domain.model.entity.Quiz.Type.Companion.of
+import cn.ddd.examination.quiz.domain.model.vo.QuizBankId
 
-data class QuizCreateCommand(
+data class CreateQuizCommand(
     val quizBankId: String,
     val type: String,
     val subject: String,
@@ -12,7 +12,7 @@ data class QuizCreateCommand(
     val teacherId: String
 )
 
-fun QuizCreateCommand.toEntity() = Quiz(
+fun CreateQuizCommand.toEntity() = Quiz(
     quizBankId = QuizBankId(quizBankId),
     type = of(type),
     subject = subject,

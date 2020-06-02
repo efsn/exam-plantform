@@ -1,10 +1,10 @@
 package cn.ddd.examination.quiz.representation
 
 import cn.ddd.examination.quiz.application.QuizApplicationService
-import cn.ddd.examination.quiz.domain.model.Quiz
-import cn.ddd.examination.quiz.domain.model.Quiz.Type.BLANK
-import cn.ddd.examination.quiz.domain.model.QuizBankId
-import cn.ddd.examination.quiz.domain.model.QuizId
+import cn.ddd.examination.quiz.domain.model.entity.Quiz
+import cn.ddd.examination.quiz.domain.model.entity.Quiz.Type.BLANK
+import cn.ddd.examination.quiz.domain.model.vo.QuizBankId
+import cn.ddd.examination.quiz.domain.model.vo.QuizId
 import io.kotlintest.shouldNotBe
 import io.kotlintest.specs.StringSpec
 import io.micronaut.http.client.HttpClient
@@ -18,18 +18,23 @@ import io.mockk.verify
 
 @MicronautTest
 internal class QuizAPITest(
-    private val service: QuizApplicationService,
-    @field:Client("/quizzes")
-    private val client: HttpClient
+    private val quizApplicationService: QuizApplicationService,
+    @Client("/quizzes") private val client: HttpClient
 ) : StringSpec({
-    "should get all quizzes"{
-        val mock = getMock(service)
-        every { mock.getQuiz(any()) } answers { Quiz(QuizBankId("1"), QuizId("1"), BLANK, "", "", "") }
+    "should get all quizzes" {
+        val mock = getMock(quizApplicationService)
+        every { mock.getQuiz(any()) } returns Quiz(
+            QuizBankId("1"),
+            QuizId("1"),
+            BLANK,
+            "subject",
+            "A",
+            "tony"
+        )
         client.toBlocking().retrieve("/1", Quiz::class.java) shouldNotBe null
         verify { mock.getQuiz("1") }
     }
 }) {
-
-    @MockBean(QuizApplicationService::class)
-    fun service(): QuizApplicationService = mockk()
+    @MockBean
+    fun quizApplicationService() = mockk<QuizApplicationService>()
 }

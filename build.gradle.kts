@@ -31,6 +31,7 @@ dependencies {
     implementation("io.micronaut:micronaut-http-server-netty")
     implementation("io.micronaut:micronaut-runtime")
     implementation("javax.annotation:javax.annotation-api")
+    implementation("io.swagger.core.v3:swagger-annotations")
 
     runtimeOnly("ch.qos.logback:logback-classic:1.2.3")
     runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin:2.9.8")
